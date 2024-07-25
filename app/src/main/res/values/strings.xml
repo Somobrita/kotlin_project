@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">android_exam</string>
+
+        <string name="carousel_image_1_description">A description for Image 1</string>
+        <string name="carousel_image_2_description">A description for Image 2</string>
+        <string name="carousel_image_3_description">A description for Image 3</string>
+
 </resources>
