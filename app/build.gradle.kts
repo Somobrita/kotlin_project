@@ -60,7 +60,7 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation:1.5.0")
     implementation ("androidx.compose.runtime:runtime:1.5.0")
     implementation ("androidx.compose.material:material:1.5.0")
-//    implementation ("com.google.accompanist:accompanist-pager:0.29.0-beta")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.4.0")
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

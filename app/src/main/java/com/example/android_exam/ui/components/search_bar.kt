@@ -27,22 +27,21 @@ fun SearchBar(
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp) // Add padding around the search bar
-            .height(48.dp)
             .offset(y = searchBarTop)
-            .background(Color.White, shape = RoundedCornerShape(12.dp))
-            .border(1.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
+            .height(48.dp)
+        .border(1.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
     ) {
         TextField(
             value = searchText,
             onValueChange = onSearchTextChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(48.dp), // Match the Box height
             placeholder = {
                 Text(
                     text = "Search",
                     color = Color.Gray,
-                    style = MaterialTheme.typography.body2.copy(fontSize = 14.sp)
+                    style = MaterialTheme.typography.body2.copy(fontSize = 12.sp)
                 )
             },
             leadingIcon = {
@@ -67,3 +66,4 @@ fun SearchBar(
         )
     }
 }
+

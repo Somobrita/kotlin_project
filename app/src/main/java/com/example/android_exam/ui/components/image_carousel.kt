@@ -18,18 +18,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import kotlin.math.abs
+import kotlinx.coroutines.launch
 
 @Composable
 fun ImageCarousel(
-    images: List<Painter>, // Ensure images are of type Painter
+    images: List<Painter>,
     scrollState: LazyListState,
     onIndexChanged: (Int) -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
+    val coroutineScope = rememberCoroutineScope()
 
     var currentIndex by remember { mutableStateOf(0) }
 
+    // Update current index based on scroll state
     LaunchedEffect(scrollState.layoutInfo) {
         val layoutInfo = scrollState.layoutInfo
         val visibleItemsInfo = layoutInfo.visibleItemsInfo
@@ -45,6 +48,13 @@ fun ImageCarousel(
                 currentIndex = newIndex
                 onIndexChanged(newIndex)
             }
+        }
+    }
+
+    // Smoothly scroll to the center item
+    LaunchedEffect(currentIndex) {
+        coroutineScope.launch {
+            scrollState.animateScrollToItem(currentIndex, 0)
         }
     }
 
