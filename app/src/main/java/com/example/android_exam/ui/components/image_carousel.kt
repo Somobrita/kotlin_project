@@ -89,20 +89,21 @@ fun ImageCarousel(
         // Indicator dots
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            repeat(images.size) { dotIndex ->
+            images.forEachIndexed { index, _ ->
                 Box(
                     modifier = Modifier
-                        .size(12.dp)
+                        .size(10.dp)
                         .background(
-                            color = if (dotIndex == currentIndex) Color.Black else Color.Gray,
+                            color = if (index == currentIndex) Color(0xFF03DAC5) else Color.Gray,
                             shape = CircleShape
                         )
-                        .padding(2.dp)
                 )
+                if (index != images.lastIndex) {
+                    Spacer(modifier = Modifier.width(8.dp)) // Add space between dots
+                }
             }
         }
     }

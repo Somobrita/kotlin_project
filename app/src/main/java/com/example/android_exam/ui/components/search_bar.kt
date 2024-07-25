@@ -26,11 +26,11 @@ fun SearchBar(
 ) {
     Box(
         modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp) // Add padding around the search bar
             .height(48.dp)
             .offset(y = searchBarTop)
-            .background(Color.White, shape = RoundedCornerShape(40.dp))
-            .border(1.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(40.dp))
-            .padding(horizontal = 8.dp)
+            .background(Color.White, shape = RoundedCornerShape(12.dp))
+            .border(1.dp, Color.Gray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp))
     ) {
         TextField(
             value = searchText,

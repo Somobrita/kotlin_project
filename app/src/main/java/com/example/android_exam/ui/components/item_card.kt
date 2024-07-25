@@ -15,52 +15,53 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import com.example.android_exam.R
 
 @Composable
-fun ItemCard(item: Pair<String, String>) {
+fun ItemCard(
+    item: Pair<String, String>,
+    image: Painter
+) {
     val (name, subtitle) = item
-    val image: Painter = painterResource(id = R.drawable.image1) // Replace with dynamic image if needed
 
     Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), // Slightly reduced elevation for a more subtle shadow
+        shape = RoundedCornerShape(8.dp), // Less rounded corners for a sleeker look
         modifier = Modifier
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp) // Balanced padding around the card
             .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
                 .fillMaxWidth()
+                .padding(8.dp)
         ) {
             // Image
             Image(
                 painter = image,
                 contentDescription = "Item Image",
                 modifier = Modifier
-                    .size(80.dp) // Fixed size for the image
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(80.dp) // Square size for the image
+                    .clip(RoundedCornerShape(12.dp)) // Rounded corners for the square image
             )
-            Spacer(modifier = Modifier.width(16.dp))
+
+            Spacer(modifier = Modifier.width(8.dp))
             // Text Column
             Column(
                 modifier = Modifier
-                    .weight(1f) // Takes up remaining space
-                    .padding(start = 8.dp)
+                    .weight(1f) // Ensures the text column fills available space
+                    .padding(vertical = 4.dp) // Vertical padding to center text
             ) {
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 18.sp),
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 16.sp), // Consistent text style
                     color = Color.Black,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp)) // Space between title and subtitle
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp), // Slightly larger subtitle text
                     color = Color.Gray,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
