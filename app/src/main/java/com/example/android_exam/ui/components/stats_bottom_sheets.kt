@@ -15,7 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun StatsBottomSheet(items: List<String>) {
-    val charCount = items.joinToString("").groupingBy { it }.eachCount()
+    // Exclude spaces and calculate character counts
+    val charCount = items.joinToString("").filter { it.isLetterOrDigit() }.groupingBy { it }.eachCount()
     val sortedChars = charCount.entries.sortedByDescending { it.value }.take(3)
     val totalCount = items.size
 
@@ -51,5 +52,6 @@ fun StatsBottomSheet(items: List<String>) {
                 color = Color.Black
             )
         }
+
     }
 }

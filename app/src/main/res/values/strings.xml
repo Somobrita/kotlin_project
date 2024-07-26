@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">android_exam</string>
+    <string name="app_name">jet-compose</string>
 
         <string name="carousel_image_1_description">A description for Image 1</string>
         <string name="carousel_image_2_description">A description for Image 2</string>

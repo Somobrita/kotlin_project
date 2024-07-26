@@ -51,7 +51,6 @@ fun ImageCarousel(
         }
     }
 
-    // Smoothly scroll to the center item
     LaunchedEffect(currentIndex) {
         coroutineScope.launch {
             scrollState.animateScrollToItem(currentIndex, 0)
