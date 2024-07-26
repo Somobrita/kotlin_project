@@ -7,33 +7,73 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- ViewPager2 for the image carousel -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!-- AppBarLayout to hold the SearchView -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Search..."
-            android:iconifiedByDefault="false"/>
-    </com.google.android.material.appbar.AppBarLayout>
+            android:orientation="vertical">
 
-    <!-- RecyclerView for the list of items -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            <!-- ViewPager2 for the image carousel -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"/>
+
+            <!-- TabLayout for carousel indicators -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabDots"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="Carousel page indicators"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:layout_constraintTop_toBottomOf="@id/viewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tabPaddingStart="10dp"
+            app:tabPaddingEnd="10dp"
+            app:tabPadding="10dp"
+            />
+
+
+            <!-- SearchView -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:queryHint="Search..."
+                android:iconifiedByDefault="false"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/search_view_background"
+                app:layout_constraintTop_toBottomOf="@id/tabDots"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- RecyclerView for the list of items -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/search_view"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Floating Action Button for showing the statistics -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -43,6 +83,5 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_statistics"
-        android:contentDescription="@string/fab_desc"
-        />
+        android:contentDescription="@string/fab_desc"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

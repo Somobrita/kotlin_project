@@ -13,9 +13,11 @@ import android.widget.TextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 // Data class for List items
 data class ListItem(val imageResId: Int, val title: String, val subtitle: String)
@@ -50,7 +52,7 @@ class ItemAdapter(var items: List<ListItem>) : Adapter<ItemAdapter.ItemViewHolde
 }
 
 // Adapter for ViewPager2
-class ImageCarouselAdapter(private val images: List<Int>) : Adapter<ImageCarouselAdapter.ImageViewHolder>() {
+class ImageCarouselAdapter(val images: List<Int>) : Adapter<ImageCarouselAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View) : ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.carouselImageView)
@@ -74,12 +76,103 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var imageCarouselAdapter: ImageCarouselAdapter
-    private val initialItems = listOf(
-        ListItem(R.drawable.image1, "Title 1", "Subtitle 1"),
-        ListItem(R.drawable.image2, "Title 2", "Subtitle 2"),
-        ListItem(R.drawable.image3, "Title 3", "Subtitle 3")
-        // Add more items as needed
+
+
+    // Define your lists of items
+    val list1 = listOf(
+        ListItem(R.drawable.image1, "Mount Fuji", "Japan's iconic mountain and a popular hiking destination"),
+        ListItem(R.drawable.image1, "Machu Picchu", "Historic Incan city located in the Andes mountains of Peru"),
+        ListItem(R.drawable.image1, "Swiss Alps", "Scenic mountain range offering skiing and hiking opportunities"),
+        ListItem(R.drawable.image1, "Black Forest", "Wooded mountain range in southwest Germany, known for its picturesque landscapes"),
+        ListItem(R.drawable.image1, "Kashmir Valley", "Beautiful valley in the Indian Himalayas, known for its scenic beauty"),
+        ListItem(R.drawable.image1, "Munnar", "Hill station in Kerala, India, famous for its tea plantations"),
+        ListItem(R.drawable.image1, "Shimla", "Capital city of Himachal Pradesh, India, known for its colonial architecture and cool climate"),
+        ListItem(R.drawable.image1, "Darjeeling", "Hill station in West Bengal, India, known for its tea gardens and views of Kanchenjunga"),
+        // Additional items
+        ListItem(R.drawable.image1, "Rocky Mountains", "A major mountain range in western North America known for its stunning landscapes"),
+        ListItem(R.drawable.image1, "Himalayas", "The tallest mountain range in the world, spanning five countries in Asia"),
+        ListItem(R.drawable.image1, "Andes Mountains", "The longest continental mountain range in the world, located in South America"),
+        ListItem(R.drawable.image1, "Appalachian Mountains", "A mountain range in eastern North America known for its rich biodiversity"),
+        ListItem(R.drawable.image1, "Pyrenees", "A mountain range separating the Iberian Peninsula from the rest of Europe"),
+        ListItem(R.drawable.image1, "Carpathian Mountains", "A mountain range in Central and Eastern Europe, known for its rich wildlife")
     )
+
+    val list2 = listOf(
+        ListItem(R.drawable.image2, "Zermatt", "A Swiss village at the base of the Matterhorn, popular for skiing and mountaineering"),
+        ListItem(R.drawable.image2, "Lapland", "Region in Finland known for its winter activities and Northern Lights"),
+        ListItem(R.drawable.image2, "Siberia", "Vast region in Russia known for its extreme cold and snow"),
+        ListItem(R.drawable.image2, "Iceland", "Known for its glaciers and ice caves"),
+        ListItem(R.drawable.image2, "Gulmarg", "Popular skiing destination in Jammu and Kashmir, India"),
+        ListItem(R.drawable.image2, "Auli", "Snow-capped skiing resort in Uttarakhand, India"),
+        ListItem(R.drawable.image2, "Manali", "Hill station in Himachal Pradesh, India, known for its winter sports"),
+        ListItem(R.drawable.image2, "Nathula Pass", "Mountain pass in Sikkim, India, known for its snowy conditions"),
+        // Additional items
+        ListItem(R.drawable.image2, "Banff", "A Canadian town in Alberta known for its stunning mountainous surroundings"),
+        ListItem(R.drawable.image2, "Aspen", "A ski resort town in Colorado, USA, known for its winter sports"),
+        ListItem(R.drawable.image2, "Nagano", "A city in Japan known for hosting the 1998 Winter Olympics"),
+        ListItem(R.drawable.image2, "Chamonix", "A town in the French Alps known for its skiing and mountaineering"),
+        ListItem(R.drawable.image2, "Whistler", "A Canadian resort town known for its world-class ski slopes")
+    )
+
+    val list3 = listOf(
+        ListItem(R.drawable.image3, "Lake Bled", "A picturesque lake with an island and castle in Slovenia"),
+        ListItem(R.drawable.image3, "Lake Como", "An Italian lake surrounded by mountains and charming villages"),
+        ListItem(R.drawable.image3, "Loch Ness", "A Scottish lake known for its mysterious legend of the Loch Ness Monster"),
+        ListItem(R.drawable.image3, "Lake Atitlán", "A volcanic crater lake in the Guatemalan Highlands"),
+        ListItem(R.drawable.image3, "Dal Lake", "A serene lake in Srinagar, Jammu and Kashmir, India"),
+        ListItem(R.drawable.image3, "Naini Lake", "A picturesque lake in Nainital, Uttarakhand, India"),
+        ListItem(R.drawable.image3, "Pangong Lake", "A high-altitude lake in Ladakh, India"),
+        ListItem(R.drawable.image3, "Sattal", "A group of interconnected lakes in Uttarakhand, India"),
+        // Additional items
+        ListItem(R.drawable.image3, "Lake Tahoe", "A large freshwater lake in the Sierra Nevada Mountains, USA"),
+        ListItem(R.drawable.image3, "Crater Lake", "A deep blue lake in Oregon, USA, formed by a collapsed volcano"),
+        ListItem(R.drawable.image3, "Great Lakes", "A group of five large freshwater lakes in North America"),
+        ListItem(R.drawable.image3, "Lake Victoria", "The largest lake in Africa, shared by Uganda, Kenya, and Tanzania"),
+        ListItem(R.drawable.image3, "Baikal Lake", "A rift lake in Siberia, Russia, the world's deepest and oldest freshwater lake")
+    )
+
+    val list4 = listOf(
+        ListItem(R.drawable.image4, "Sahara Desert", "The largest hot desert in the world, located in North Africa"),
+        ListItem(R.drawable.image4, "Death Valley", "A desert valley in eastern California, USA"),
+        ListItem(R.drawable.image4, "Namib Desert", "A coastal desert in southern Africa"),
+        ListItem(R.drawable.image4, "Arabian Desert", "A vast desert wilderness in Western Asia"),
+        ListItem(R.drawable.image4, "Kalahari Desert", "A semi-arid sandy savanna in southern Africa"),
+        ListItem(R.drawable.image4, "Rann of Kutch", "A salt marsh in Gujarat, India, known for its white salt desert"),
+        ListItem(R.drawable.image4, "Ladakh", "A high-altitude desert region in northern India"),
+        ListItem(R.drawable.image4, "Jodhpur", "City in Rajasthan, India, known for its proximity to desert landscapes"),
+        // Additional items
+        ListItem(R.drawable.image4, "Gobi Desert", "A large desert region in Asia, covering parts of northern China and southern Mongolia"),
+        ListItem(R.drawable.image4, "Mojave Desert", "A desert in the southwestern United States, known for its Joshua Trees"),
+        ListItem(R.drawable.image4, "Atacama Desert", "A desert in Chile, known as one of the driest places on Earth"),
+        ListItem(R.drawable.image4, "Antarctic Desert", "The largest desert in the world, consisting of the ice sheets of Antarctica"),
+        ListItem(R.drawable.image4, "Simpson Desert", "A large desert in central Australia, known for its red sand dunes")
+    )
+
+    val list5 = listOf(
+        ListItem(R.drawable.image5, "Maui", "An island in Hawaii known for its beautiful beaches and lush landscapes"),
+        ListItem(R.drawable.image5, "Maldives", "An archipelago in the Indian Ocean known for its white sand beaches"),
+        ListItem(R.drawable.image5, "Bali", "An Indonesian island famous for its beaches and vibrant culture"),
+        ListItem(R.drawable.image5, "Phuket", "Thailand's largest island, known for its beaches and nightlife"),
+        ListItem(R.drawable.image5, "Goa", "Indian state known for its beautiful beaches and vibrant nightlife"),
+        ListItem(R.drawable.image5, "Kovalam", "A beach town in Kerala, India, known for its serene beaches"),
+        ListItem(R.drawable.image5, "Varkala", "A beach destination in Kerala, India, known for its cliffs and scenic beauty"),
+        // Additional items
+        ListItem(R.drawable.image5, "Bondi Beach", "A popular beach in Sydney, Australia, known for its surfing"),
+        ListItem(R.drawable.image5, "Copacabana", "A famous beach in Rio de Janeiro, Brazil, known for its vibrant atmosphere"),
+        ListItem(R.drawable.image5, "Santorini", "A Greek island known for its stunning beaches and unique architecture"),
+        ListItem(R.drawable.image5, "Tulum", "A beach destination in Mexico, known for itsMayan ruins and beautiful coastline"),
+        ListItem(R.drawable.image5, "Boracay", "A small island in the Philippines known for its white sand beaches")
+    )
+
+    // Map drawable resources to their corresponding lists
+    private val imageItemMap = mapOf(
+        R.drawable.image1 to list1,
+        R.drawable.image2 to list2,
+        R.drawable.image3 to list3,
+        R.drawable.image4 to list4,
+        R.drawable.image5 to list5
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,17 +182,13 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         val searchView = findViewById<SearchView>(R.id.search_view)
+        val tabLayout = findViewById<TabLayout>(R.id.tabDots)
 
         // Initialize adapters
-        imageCarouselAdapter = ImageCarouselAdapter(listOf(
-            R.drawable.image1,
-            R.drawable.image2,
-            R.drawable.image3
-            // Add more images as needed
-        ))
+        imageCarouselAdapter = ImageCarouselAdapter(imageItemMap.keys.toList())
         viewPager.adapter = imageCarouselAdapter
 
-        itemAdapter = ItemAdapter(initialItems)
+        itemAdapter = ItemAdapter(emptyList())
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = itemAdapter
 
@@ -107,9 +196,33 @@ class MainActivity : AppCompatActivity() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                updateListContentForPage(position)
+                val selectedImage = imageCarouselAdapter.images[position]
+                updateListContentForPage(selectedImage)
             }
         })
+
+        // Set up TabLayout with dots
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        }.attach()
+
+        // Set custom drawable for TabLayout dots
+        tabLayout.apply {
+            tabMode = TabLayout.MODE_FIXED
+            setSelectedTabIndicatorHeight(0) // Hide the default indicator
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.view?.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot_selected)
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    tab?.view?.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot)
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    // Optionally handle reselection
+                }
+            })
+        }
 
         // Set up search functionality
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -127,16 +240,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateListContentForPage(position: Int) {
-        // Update the list content based on the selected page
-        val updatedItems = initialItems // Replace with actual logic based on the page position
+    private fun updateListContentForPage(selectedImage: Int) {
+        val updatedItems = imageItemMap[selectedImage] ?: emptyList()
         itemAdapter.updateItems(updatedItems)
     }
 
     private fun filterList(query: String) {
-        val filteredItems = initialItems.filter {
+        val currentImage = imageCarouselAdapter.images[viewPager.currentItem]
+        val filteredItems = imageItemMap[currentImage]?.filter {
             it.title.contains(query, ignoreCase = true)
-        }
+        } ?: emptyList()
         itemAdapter.updateItems(filteredItems)
     }
 
