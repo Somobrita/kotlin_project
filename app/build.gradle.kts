@@ -51,6 +51,13 @@ android {
 
 dependencies {
 
+        implementation ("androidx.recyclerview:recyclerview:1.2.1")
+        implementation ("com.google.android.material:material:1.4.0")
+        implementation ("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
+        implementation ("androidx.constraintlayout:constraintlayout:2.1.1")
+        implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+
+
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.7.0")
