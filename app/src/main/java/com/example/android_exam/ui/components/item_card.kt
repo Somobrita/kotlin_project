@@ -25,7 +25,7 @@ fun ItemCard(
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), // Slightly reduced elevation for a more subtle shadow
-        shape = RoundedCornerShape(8.dp), // Less rounded corners for a sleeker look
+        shape = RoundedCornerShape(12.dp), // Less rounded corners for a sleeker look
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp) // Balanced padding around the card
             .fillMaxWidth()
