@@ -3,18 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/white"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:clipToPadding="false">
 
     <TextView
-        android:id="@+id/itemCountTextView"
+        android:id="@+id/statisticsTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Statistics"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/totalItemsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Items: 0"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="12dp" />
 
     <TextView
-        android:id="@+id/topCharactersTextView"
+        android:id="@+id/topCharactersTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"/>
+        android:text="Top 3 Characters: \n"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:id="@+id/topCharactersContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.example.android_exam
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.google.android.material.tabs.TabLayout
@@ -76,6 +79,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemAdapter: ItemAdapter
     private lateinit var imageCarouselAdapter: ImageCarouselAdapter
+    private lateinit var nestedScrollView: NestedScrollView
+
+
+    private val debounceDelay = 30L // Debounce delay in milliseconds
+    private val handler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
 
     // Define your lists of items
     val list1 = listOf(
@@ -163,6 +172,8 @@ class MainActivity : AppCompatActivity() {
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         val searchView = findViewById<SearchView>(R.id.search_view)
         val tabLayout = findViewById<TabLayout>(R.id.tabDots)
+        nestedScrollView = findViewById(R.id.nestedScrollView)
+
 
         // Initialize adapters
         imageCarouselAdapter = ImageCarouselAdapter(imageItemMap.keys.toList())
@@ -197,11 +208,13 @@ class MainActivity : AppCompatActivity() {
             setSelectedTabIndicatorHeight(0) // Hide the default indicator
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tab?.view?.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot_selected)
+                    tab?.view?.background =
+                        ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot_selected)
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    tab?.view?.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot)
+                    tab?.view?.background =
+                        ContextCompat.getDrawable(this@MainActivity, R.drawable.tab_dot)
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -211,11 +224,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Set up search functionality
+        searchView.isIconified = false
+        searchView.clearFocus()
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                filterList(newText.orEmpty())
+                searchRunnable?.let { handler.removeCallbacks(it) }
+
+                searchRunnable = Runnable {
+                    val query = newText?.trim().orEmpty()
+                    if (query.isEmpty()) {
+                        // Reset to original list
+                        updateListContentForPage(imageCarouselAdapter.images[viewPager.currentItem])
+                    } else {
+                        // Filter the list based on the query
+                        filterList(query)
+                    }
+                }
+
+                searchRunnable?.let { handler.postDelayed(it, debounceDelay) }
+
                 return true
             }
         })
@@ -224,7 +254,15 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             showBottomSheetDialog()
         }
+        // Add scroll listener to NestedScrollView
+        nestedScrollView.viewTreeObserver.addOnScrollChangedListener {
+            val scrollY = nestedScrollView.scrollY
+            searchView.translationY = -scrollY.toFloat()
+        }
+
     }
+
+
 
     private fun updateListContentForPage(imageResId: Int) {
         val items = imageItemMap[imageResId] ?: emptyList()
@@ -242,8 +280,8 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomSheetDialog() {
         val bottomSheetDialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
-        val itemCountTextView = view.findViewById<TextView>(R.id.itemCountTextView)
-        val topCharactersTextView = view.findViewById<TextView>(R.id.topCharactersTextView)
+        val itemCountTextView = view.findViewById<TextView>(R.id.totalItemsTextView)
+        val topCharactersTextView = view.findViewById<TextView>(R.id.topCharactersTitleTextView)
 
         // Calculate item counts and top characters
         val itemCount = itemAdapter.items.size
@@ -260,7 +298,7 @@ class MainActivity : AppCompatActivity() {
         val topCharacters = characterCountMap.entries
             .sortedByDescending { it.value }
             .take(3)
-            .joinToString(", ") { "${it.key} (${it.value})" }
+            .joinToString(", ") { "\n ${it.key} = (${it.value})" }
 
         itemCountTextView.text = "Item Count: $itemCount"
         topCharactersTextView.text = "Top Characters: $topCharacters"
